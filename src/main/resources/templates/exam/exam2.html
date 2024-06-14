@@ -1,38 +1,17 @@
 <!DOCTYPE html>
-<html xmlns:th ="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layout/default}">
 <head>
-<meta charset="UTF-8">
-<link rel="icon" href="data:,">
-<title th:text="${title}">thymeleaf 반복문</title>
-<style>
-	table{
-		border : 1px solid black;
-		width : 700px;
-		table-layout : auto;
-		text-align : center;
-	}
-	
-	th{
-		border : 1px soild black;
-		background-color : cornflowerblue;
-		color : azure;
-		height : 30px;
-	}
-	
-	td{
-		border : 1px solid black;
-		height : 30px;
-	}
-</style>
 </head>
-<body>
+<th:block layout:fragment="customContent">
 	<h1>thymleaf 반복문</h1>
 	- 태그속성 th:each 문법<br>
 	- 문법예시 : th:each="약어(객체, 객체의 상태) : ${반복가능 개체}"<br>
 	- 배열, 컬렉션 류의 순회 혹은 반복<br>
 	- 유효 범위 : 선언한 태그가 닫힐 떄까지<br><br><br>	
 	
-	<table>
+	<table >
 		<thead>
 			<th>회원아이디</th>
 			<th>회원비번</th>
@@ -47,7 +26,7 @@
 				<td th:text="${l.memberPw}"></td>
 				<td th:text="${l.memberLevel}"></td>
 				<td>[[${l.memberName}]]</td>
-				<td>[[${l.memberMoblie}]]</td>
+				<td>[[${l.memberMobile}]]</td>
 			</tr>
 		</tbody>
 		<tfoot>
@@ -69,6 +48,6 @@
 		
 		</label>
 	</div>
-	
-</body>
+
+</th:block>>
 </html>

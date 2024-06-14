@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{layout/default}">
 <head>
-<meta charset="UTF-8">
-<title th:text="${title}">ajax 실습</title>
-<link rel="stylesheet" type="text/css" th:href="@{/css/table.css}">
 </head>
-<body>
+<th:block layout:fragment="customContent">
 	<h1>ajax 실습</h1>
 	<button type="button" id="listBtn">전체 회원조회</button><br><br>
 	
@@ -25,49 +24,52 @@
 		<tbody id="tBody">
 		</tbody>
 	</table>
+</th:block>
+
+<th:block layout:fragment="customJs">
 	<script>
-		// fetch 
+		// fetch
 		// 실습. listBtn를 클릭시 콘솔에 회원의 전체목록을 출력하시오.
 		const request = {
-				get(url){
-					return fetch(url)
-							.then(response => response.json());
-				},
-				post(url, option){
-					return fetch(url, option)
-							.then(response => response.json());
-				}
+			get(url){
+				return fetch(url)
+						.then(response => response.json());
+			},
+			post(url, option){
+				return fetch(url, option)
+						.then(response => response.json());
+			}
 		}
 		const $tbody = document.querySelector('#tBody');
 		const $listBtn = document.querySelector('#listBtn');
 		$listBtn.addEventListener('click', e => {
 			request.get('/member/list')
-				   .then(list => {
-					   $tbody.replaceChildren();
-					   const domFragment = document.createDocumentFragment();
-					   const memberList = list.map(memberInfo => {
-						  const memberId = memberInfo.memberId;
-						  const memberPw = memberInfo.memberPw;
-						  const memberLevel = memberInfo.memberLevel;
-						  const memberName = memberInfo.memberName;
-						  const memberMobile = memberInfo.memberMobile;
-						  return {memberId, memberPw, memberLevel, memberName, memberMobile}
-					   });
-					   memberList.forEach(memberInfo => {
-						   console.log(memberInfo);
-						   const $tr = document.createElement('tr');
-						   for(const key in memberInfo){
-							   const $td = document.createElement('td');
-							   $td.textContent = memberInfo[key];
-							   $tr.append($td);
-						   }
-						   domFragment.append($tr);
-					   });
-					  $tbody.append(domFragment);
-				   })
-				   .catch(error => console.log(error));
+					.then(list => {
+						$tbody.replaceChildren();
+						const domFragment = document.createDocumentFragment();
+						const memberList = list.map(memberInfo => {
+							const memberId = memberInfo.memberId;
+							const memberPw = memberInfo.memberPw;
+							const memberLevel = memberInfo.memberLevel;
+							const memberName = memberInfo.memberName;
+							const memberMobile = memberInfo.memberMobile;
+							return {memberId, memberPw, memberLevel, memberName, memberMobile}
+						});
+						memberList.forEach(memberInfo => {
+							console.log(memberInfo);
+							const $tr = document.createElement('tr');
+							for(const key in memberInfo){
+								const $td = document.createElement('td');
+								$td.textContent = memberInfo[key];
+								$tr.append($td);
+							}
+							domFragment.append($tr);
+						});
+						$tbody.append(domFragment);
+					})
+					.catch(error => console.log(error));
 		});
-		
+
 		const $searchBtn = document.querySelector('#searchBtn');
 		$searchBtn.addEventListener('click', e => {
 			const $memberId = document.querySelector('#memberId');
@@ -78,42 +80,42 @@
 				return ;
 			}
 			const option = {
-					method : 'POST',
-					headers : {
-						'Content-Type' : 'application/json'
-					},
-					body : JSON.stringify({
-						'memberId' : value	
-					})
+				method : 'POST',
+				headers : {
+					'Content-Type' : 'application/json'
+				},
+				body : JSON.stringify({
+					'memberId' : value
+				})
 			}
 			request.post('/member/searchId', option)
-				   .then(memberInfo => {
-					   $tbody.replaceChildren();
-					   
-					   console.log(memberInfo);
-					   
-					   if(memberInfo ==null) return;
-					   
-					   const memberId = memberInfo.memberId;
-					   const memberPw = memberInfo.memberPw;
-					   const memberLevel = memberInfo.memberLevel;
-					   const memberName = memberInfo.memberName;
-					   const memberMobile = memberInfo.memberMobile;
-					   const parseObj = {memberId, memberPw, memberLevel, memberName, memberMobile};
-					   
-					   
-					   const $tr = document.createElement('tr');
-					   for(const key in parseObj){
-						   const $td = document.createElement('td');
-						   $td.textContent = parseObj[key];
-						   $tr.append($td);
-					   }
-					   $tbody.append($tr);
-				   })
-				   .catch(error => console.log(error));
+					.then(memberInfo => {
+						$tbody.replaceChildren();
+
+						console.log(memberInfo);
+
+						if(memberInfo ==null) return;
+
+						const memberId = memberInfo.memberId;
+						const memberPw = memberInfo.memberPw;
+						const memberLevel = memberInfo.memberLevel;
+						const memberName = memberInfo.memberName;
+						const memberMobile = memberInfo.memberMobile;
+						const parseObj = {memberId, memberPw, memberLevel, memberName, memberMobile};
+
+
+						const $tr = document.createElement('tr');
+						for(const key in parseObj){
+							const $td = document.createElement('td');
+							$td.textContent = parseObj[key];
+							$tr.append($td);
+						}
+						$tbody.append($tr);
+					})
+					.catch(error => console.log(error));
 		});
 	</script>
-</body>
+</th:block>
 </html>
 
 
